@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 public class StepCounterService extends Service implements SensorEventListener {
 
-    private static final int NOTIFICATION_ID = 1;
 
     private SensorManager sensorManager;
     private Sensor stepDetectorSensor;

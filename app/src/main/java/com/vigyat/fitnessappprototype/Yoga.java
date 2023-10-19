@@ -45,7 +45,7 @@ public class Yoga extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        TextView benefitsTextView = findViewById(R.id.benefits);
+        TextView benefitsTextView = findViewById(R.id.benefits2);
 
 
         // Update views with the received data

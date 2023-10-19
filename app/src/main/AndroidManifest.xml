@@ -64,10 +64,6 @@
         <service android:name=".StepCounterService"/>
 
 
-
-
-
-
     </application>
 
 </manifest>

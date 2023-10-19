@@ -77,7 +77,6 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
             textView = itemView.findViewById(R.id.yogaName);
             yogaLayout = itemView.findViewById(R.id.yogaLayout);
 
-
         }
     }
 }

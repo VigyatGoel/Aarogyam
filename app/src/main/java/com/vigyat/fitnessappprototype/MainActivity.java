@@ -6,12 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +15,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.Manifest;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -51,17 +47,20 @@ public class MainActivity extends AppCompatActivity {
         //Check if the permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            // Request the permission
+            // Request the ACTIVITY_RECOGNITION permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                     REQUEST_ACTIVITY_RECOGNITION_PERMISSION);
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_POST_NOTIFICATION_PERMISSION);
-            // You have the permission, you can proceed with your task.
-        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            // Request the POST_NOTIFICATIONS permission
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
+//                    REQUEST_POST_NOTIFICATION_PERMISSION);
+//        }
+
         auth = FirebaseAuth.getInstance();
 
         user = auth.getCurrentUser();
@@ -83,29 +82,10 @@ public class MainActivity extends AppCompatActivity {
         exerciseLAV = findViewById(R.id.LAVExercise);
         stepCounterLL = findViewById(R.id.idLLstepCounter);
 
-        Calendar now = Calendar.getInstance();
-        Calendar midnight = Calendar.getInstance();
-        midnight.set(Calendar.HOUR_OF_DAY, 0);
-        midnight.set(Calendar.MINUTE, 1);
-        midnight.set(Calendar.SECOND, 0);
+        resetStepCounter();
 
-        if (now.after(midnight)) {
-            midnight.add(Calendar.DATE, 1);
-        }
-
-        long initialDelay = midnight.getTimeInMillis() - now.getTimeInMillis();
-
-        PeriodicWorkRequest clearSharedPreferencesWork = new PeriodicWorkRequest.Builder(
-                ResetStepCounter.class,
-                1, TimeUnit.DAYS
-        )
-                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                .build();
-
-        WorkManager.getInstance(this).enqueue(clearSharedPreferencesWork);
-
-        Intent serviceIntent = new Intent(this, StepCounterService.class);
-        startService(serviceIntent);
+        Intent i = new Intent(getApplicationContext(), StepCounterService.class);
+        startService(i);
 
 
         exerciseLL.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +115,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_ACTIVITY_RECOGNITION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, continue with your app's functionality.
+
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Request the POST_NOTIFICATIONS permission
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                            REQUEST_POST_NOTIFICATION_PERMISSION);
+                }
             } else {
                 // Permission denied, handle accordingly (e.g., show a message or disable functionality).
             }
@@ -172,5 +160,31 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    public void resetStepCounter(){
+
+        Calendar now = Calendar.getInstance();
+        Calendar midnight = Calendar.getInstance();
+        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.MINUTE, 0);
+        midnight.set(Calendar.SECOND, 0);
+
+        if (now.after(midnight)) {
+            midnight.add(Calendar.DATE, 1);
+        }
+
+        long initialDelay = midnight.getTimeInMillis() - now.getTimeInMillis();
+
+        PeriodicWorkRequest clearSharedPreferencesWork = new PeriodicWorkRequest.Builder(
+                ResetStepCounter.class,
+                1, TimeUnit.DAYS
+        )
+                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                .build();
+
+        WorkManager.getInstance(this).enqueue(clearSharedPreferencesWork);
     }
 }
