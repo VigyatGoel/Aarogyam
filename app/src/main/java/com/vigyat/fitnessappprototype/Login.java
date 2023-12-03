@@ -2,6 +2,8 @@ package com.vigyat.fitnessappprototype;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -22,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword;
-    Button buttonLogin;
+    AppCompatButton buttonLogin;
     FirebaseAuth mAuth;
 
     ProgressBar progressBar;
@@ -59,6 +61,9 @@ public class Login extends AppCompatActivity {
 
         eye = findViewById(R.id.cEye);
 
+        Intent i = new Intent(getApplicationContext(), StepCounterService.class);
+        stopService(i);
+
 
         eye.setOnClickListener(v -> {
             if (editTextPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
@@ -80,7 +85,7 @@ public class Login extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), ResetPassword.class);
                 startActivity(intent);
-                finish();
+                
             }
         });
 
@@ -90,7 +95,7 @@ public class Login extends AppCompatActivity {
 
                 Intent i = new Intent(getApplicationContext(), Register.class);
                 startActivity(i);
-                finish();
+
             }
         });
 

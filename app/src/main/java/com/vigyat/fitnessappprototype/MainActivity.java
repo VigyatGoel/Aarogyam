@@ -6,6 +6,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
     private static final int REQUEST_POST_NOTIFICATION_PERMISSION = 2;
+
+
 
     private LinearLayout exerciseLL, stepCounterLL;
 
@@ -82,10 +87,17 @@ public class MainActivity extends AppCompatActivity {
         exerciseLAV = findViewById(R.id.LAVExercise);
         stepCounterLL = findViewById(R.id.idLLstepCounter);
 
-        resetStepCounter();
+        //resetStepCounter();
 
         Intent i = new Intent(getApplicationContext(), StepCounterService.class);
         startService(i);
+
+        Intent intent = new Intent(this, StepCounterResetBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, getMidnight().getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
 
 
         exerciseLL.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             new String[]{Manifest.permission.POST_NOTIFICATIONS},
                             REQUEST_POST_NOTIFICATION_PERMISSION);
                 }
+
             } else {
                 // Permission denied, handle accordingly (e.g., show a message or disable functionality).
             }
@@ -135,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
                 // Permission denied, handle it accordingly.
             }
         }
+
+
     }
 
 
@@ -188,5 +203,14 @@ public class MainActivity extends AppCompatActivity {
         WorkManager.getInstance(this).enqueue(clearSharedPreferencesWork);
     }
 
-
+    private Calendar getMidnight() {
+        Calendar midnight = Calendar.getInstance();
+        midnight.setTimeInMillis(System.currentTimeMillis());
+        midnight.set(Calendar.HOUR_OF_DAY, 0);
+        midnight.set(Calendar.MINUTE, 0);
+        midnight.set(Calendar.SECOND, 0);
+        midnight.set(Calendar.MILLISECOND, 0);
+        midnight.add(Calendar.DAY_OF_MONTH, 1);
+        return midnight;
+    }
 }

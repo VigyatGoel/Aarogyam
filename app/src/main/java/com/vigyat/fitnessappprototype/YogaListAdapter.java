@@ -69,8 +69,6 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
 
         ConstraintLayout yogaLayout;
 
-
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.yogaImage);
