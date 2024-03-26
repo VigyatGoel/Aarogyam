@@ -1,6 +1,6 @@
 # Aarogyam
 
-This is a fitness android application which can track your mental health as well as physical health.
+Aarogyam is a comprehensive fitness-based Android application designed to support users in tracking both their physical and mental well-being. Developed as part of the Smart India Hackathon 2023, Aarogyam offers a range of features aimed at promoting a healthy lifestyle.
 
 ## Features
 
@@ -19,4 +19,5 @@ This is a fitness android application which can track your mental health as well
 1. Clone the repository:
 
 ```bash
-
+https://github.com/VigyatGoel/Aarogyam.git
+```
