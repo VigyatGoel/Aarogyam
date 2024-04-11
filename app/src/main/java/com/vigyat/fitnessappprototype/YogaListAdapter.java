@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyViewHolder> {
@@ -36,7 +39,11 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
 
         YogaListModalClass yoga = yogaList.get(position);
         holder.textView.setText(yoga.getYogaName());
-        holder.imageView.setImageResource(yoga.getYogaImage());
+        //holder.imageView.setImageResource(yoga.getYogaImage());
+
+        Glide.with(context)
+                .load(yoga.getYogaImage())
+                .into(holder.imageView);
 
 
         holder.yogaLayout.setOnClickListener(new View.OnClickListener() {
