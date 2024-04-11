@@ -4,10 +4,12 @@ Aarogyam is a comprehensive fitness-based Android application designed to suppor
 
 ## Features
 
-- Login/Register
+- Login/Register using email-password
+- Login using Google SignIn
 - Step counter
 - Meditation
 - Yoga
+- See and edit user profile
 
 ## Requirements
 
