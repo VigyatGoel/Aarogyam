@@ -1,14 +1,6 @@
 package com.vigyat.fitnessappprototype;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,36 +9,59 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.Manifest;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.vigyat.fitnessappprototype.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
+
+
 
 
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
     private static final int REQUEST_POST_NOTIFICATION_PERMISSION = 2;
 
 
-
     private LinearLayout exerciseLL, stepCounterLL;
 
-
     private LottieAnimationView exerciseLAV, counterLAV;
-    private ImageView imageView;
+    private ImageView profileImage;
+    private TextView welcomeText;
+
+    private RecyclerView tipsRecyclerView;
+    private TipsCardViewAdapter tipsViewAdapter;
     FirebaseAuth auth;
 
     FirebaseUser user;
+
+    ActivityMainBinding mainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
         //Check if the permission is granted
@@ -58,13 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_ACTIVITY_RECOGNITION_PERMISSION);
         }
 
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            // Request the POST_NOTIFICATIONS permission
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.POST_NOTIFICATIONS},
-//                    REQUEST_POST_NOTIFICATION_PERMISSION);
-//        }
 
         auth = FirebaseAuth.getInstance();
 
@@ -73,50 +81,55 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             finish();
-
         }
 
-//        Intent serviceIntent = new Intent(this, StepCounterService.class);
-//        startService(serviceIntent);
+        scheduleResetStepCounter();
+
+        // If user is signed in, set the welcome message
+
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        exerciseLL = mainBinding.idLLExercise;
+        exerciseLAV = mainBinding.LAVExercise;
+        stepCounterLL = mainBinding.idLLstepCounter;
+        welcomeText = mainBinding.welcomeText;
+        tipsRecyclerView = mainBinding.tipRecyclerView;
+        profileImage = mainBinding.profileImage;
 
 
-        imageView = findViewById(R.id.aarogyamImg);
+        updateUI();
 
-        exerciseLL = findViewById(R.id.idLLExercise);
-        stepCounterLL = findViewById(R.id.idLLstepCounter);
-        exerciseLAV = findViewById(R.id.LAVExercise);
-        stepCounterLL = findViewById(R.id.idLLstepCounter);
 
         //resetStepCounter();
 
         Intent i = new Intent(getApplicationContext(), StepCounterService.class);
         startService(i);
 
-        Intent intent = new Intent(this, StepCounterResetBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, getMidnight().getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        tipsRecyclerView.setLayoutManager(layoutManager);
+        List<String> cardData = getCardData();
 
 
+        tipsViewAdapter = new TipsCardViewAdapter(cardData);
+        tipsRecyclerView.setAdapter(tipsViewAdapter);
 
-        exerciseLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        tipsRecyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
 
-                Intent i1 = new Intent(getApplicationContext(), MentalHealth_inner.class);
-                startActivity(i1);
-            }
+
+        exerciseLL.setOnClickListener(v -> {
+
+            Intent i1 = new Intent(getApplicationContext(), MentalHealth_inner.class);
+            startActivity(i1);
         });
 
-        stepCounterLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        stepCounterLL.setOnClickListener(v -> {
 
-                Intent i = new Intent(getApplicationContext(), StepCounter.class);
-                startActivity(i);
-            }
+            Intent i2 = new Intent(getApplicationContext(), StepCounter.class);
+            startActivity(i2);
         });
+
+        profileImage.setOnClickListener(v -> profileImageClick());
 
     }
 
@@ -153,64 +166,69 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
+    private List<String> getCardData() {
+        List<String> cardData = new ArrayList<>();
+        cardData.add("Stay hydrated");
+        cardData.add("Get regular exercise");
+        cardData.add("Eat a balanced diet");
+        cardData.add("Take breaks during work");
+        cardData.add("Get a good night's sleep");
+        cardData.add("Practice mindfulness and meditation");
+        cardData.add("Maintain a positive attitude");
+        cardData.add("Avoid excessive caffeine");
+        cardData.add("Limit screen time");
+        cardData.add("Connect with loved ones");
+        return cardData;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        int itemId = item.getItemId();
-
-        if (itemId == R.id.Btn) {
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-    public void resetStepCounter(){
-
-        Calendar now = Calendar.getInstance();
-        Calendar midnight = Calendar.getInstance();
-        midnight.set(Calendar.HOUR_OF_DAY, 0);
-        midnight.set(Calendar.MINUTE, 0);
-        midnight.set(Calendar.SECOND, 0);
-
-        if (now.after(midnight)) {
-            midnight.add(Calendar.DATE, 1);
-        }
-
-        long initialDelay = midnight.getTimeInMillis() - now.getTimeInMillis();
-
-        PeriodicWorkRequest clearSharedPreferencesWork = new PeriodicWorkRequest.Builder(
-                ResetStepCounter.class,
-                1, TimeUnit.DAYS
-        )
-                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+    private void scheduleResetStepCounter() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresBatteryNotLow(false)
                 .build();
 
-        WorkManager.getInstance(this).enqueue(clearSharedPreferencesWork);
+        PeriodicWorkRequest resetStepCounterRequest =
+                new PeriodicWorkRequest.Builder(ResetStepCounter.class, 24, TimeUnit.HOURS)
+                        .setInitialDelay(getDelayUntilMidnight(), TimeUnit.MILLISECONDS)
+                        .setConstraints(constraints)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueue(resetStepCounterRequest);
     }
 
-    private Calendar getMidnight() {
-        Calendar midnight = Calendar.getInstance();
-        midnight.setTimeInMillis(System.currentTimeMillis());
-        midnight.set(Calendar.HOUR_OF_DAY, 0);
-        midnight.set(Calendar.MINUTE, 0);
-        midnight.set(Calendar.SECOND, 0);
-        midnight.set(Calendar.MILLISECOND, 0);
-        midnight.add(Calendar.DAY_OF_MONTH, 1);
-        return midnight;
+    private long getDelayUntilMidnight() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTimeInMillis() - System.currentTimeMillis();
+    }
+
+    private void updateUI() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            // Update the user's name
+            String username = currentUser.getDisplayName();
+            if (username != null) {
+                welcomeText.setText(username);
+            } else {
+                welcomeText.setText("User");
+            }
+
+            // Update the user's profile image
+            if (currentUser.getPhotoUrl() != null) {
+                Glide.with(this)
+                        .load(currentUser.getPhotoUrl())
+                        .circleCrop()
+                        .into(profileImage);
+            }
+        }
+    }
+
+    private void profileImageClick(){
+        Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(i);
     }
 }

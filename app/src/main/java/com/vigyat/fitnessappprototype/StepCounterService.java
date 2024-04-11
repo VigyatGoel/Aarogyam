@@ -3,6 +3,7 @@ package com.vigyat.fitnessappprototype;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +15,11 @@ import android.os.IBinder;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
-import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
 
 public class StepCounterService extends Service implements SensorEventListener {
 
@@ -27,9 +28,13 @@ public class StepCounterService extends Service implements SensorEventListener {
     private Sensor stepDetectorSensor;
     private int stepCount = 0;
 
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepDetectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -47,6 +52,7 @@ public class StepCounterService extends Service implements SensorEventListener {
     }
 
     private void startCounting() {
+
         if (stepDetectorSensor == null) {
             Toast.makeText(this, "Step detector sensor not found", Toast.LENGTH_SHORT).show();
         } else {

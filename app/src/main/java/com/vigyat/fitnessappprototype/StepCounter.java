@@ -1,6 +1,8 @@
 package com.vigyat.fitnessappprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +16,15 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.vigyat.fitnessappprototype.databinding.ActivityStepCounterBinding;
+
 public class StepCounter extends AppCompatActivity{
 
     private TextView stepGoalTV;
     private int stepsGoal;
     private TextView stepsTV;
     private ProgressBar progressBar;
+    ActivityStepCounterBinding stepCounterBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +32,13 @@ public class StepCounter extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_counter);
 
-        stepGoalTV = findViewById(R.id.stepGoal);
-        progressBar = findViewById(R.id.progressBar2);
+        stepCounterBinding = DataBindingUtil.setContentView(this, R.layout.activity_step_counter);
 
-        stepsTV = findViewById(R.id.TVSteps);
+
+        stepGoalTV = stepCounterBinding.stepGoal;
+        progressBar = stepCounterBinding.progressBar2;
+
+        stepsTV = stepCounterBinding.TVSteps;
 
         int storedStepCount = getStepCountFromSharedPreference();
 

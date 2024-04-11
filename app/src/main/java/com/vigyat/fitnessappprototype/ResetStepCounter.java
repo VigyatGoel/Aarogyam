@@ -8,6 +8,7 @@ import androidx.work.WorkerParameters;
 
 public class ResetStepCounter extends Worker {
 
+
     public ResetStepCounter(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -15,11 +16,14 @@ public class ResetStepCounter extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // Clear your SharedPreferences data here
+
+
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
+
+        editor.putInt("stepCount", 0);
         editor.apply();
+
         return Result.success();
     }
 }

@@ -1,10 +1,13 @@
 package com.vigyat.fitnessappprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
+
+import com.vigyat.fitnessappprototype.databinding.ActivityYogaListBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +17,15 @@ public class YogaList extends AppCompatActivity {
     RecyclerView recyclerView;
     List<YogaListModalClass> yogaList;
     YogaListAdapter adapter;
+    ActivityYogaListBinding yogaListBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yoga_list);
+        yogaListBinding = DataBindingUtil.setContentView(this, R.layout.activity_yoga_list);
 
-        recyclerView = findViewById(R.id.yogaRecyclerView);
+        recyclerView = yogaListBinding.yogaRecyclerView;
 
          YogaListModalClass yoga = new YogaListModalClass("Anulom-Vilom",R.drawable.anulomvilom,"https://theyogainstitute.org/anulom-vilom-pranayama/","1.Improves breathing\n2.Reduces mental stress");
          YogaListModalClass yoga7 = new YogaListModalClass("Kapal Bhati",R.drawable.kapalbhati,"https://www.artofliving.org/in-en/yoga/breathing-techniques/skull-shining-breath-kapal-bhati","1.Improves breathing\n2.Reduces mental stress");
