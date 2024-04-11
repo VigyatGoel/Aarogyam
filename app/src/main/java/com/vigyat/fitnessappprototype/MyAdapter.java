@@ -38,16 +38,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         GovtHelpLineModal helpLine = helpLineList.get(position);
         holder.textView.setText(helpLine.getHelplineName());
         holder.imageView.setImageResource(helpLine.getImage());
-        holder.btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = helpLine.getUrl();
-                Uri webpage = Uri.parse(url);
+        holder.btn.setOnClickListener(v -> {
+            String url = helpLine.getUrl();
+            Uri webpage = Uri.parse(url);
 
-                Intent intent = new Intent(Intent.ACTION_VIEW,webpage);
-                context.startActivity(intent);
+            Intent intent = new Intent(Intent.ACTION_VIEW,webpage);
+            context.startActivity(intent);
 
-            }
         });
     }
 

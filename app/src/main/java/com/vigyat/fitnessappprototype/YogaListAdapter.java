@@ -46,18 +46,15 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
                 .into(holder.imageView);
 
 
-        holder.yogaLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.yogaLayout.setOnClickListener(v -> {
 
-                Intent intent = new Intent(context, Yoga.class);
+            Intent intent = new Intent(context, Yoga.class);
 
-                intent.putExtra("yoga_name", yoga.getYogaName());
-                intent.putExtra("yoga_image", yoga.getYogaImage());
-                intent.putExtra("yoga_url",yoga.getYogaUrl());
-                intent.putExtra("yoga_benefits",yoga.getyogaBenefits());
-                context.startActivity(intent);
-            }
+            intent.putExtra("yoga_name", yoga.getYogaName());
+            intent.putExtra("yoga_image", yoga.getYogaImage());
+            intent.putExtra("yoga_url",yoga.getYogaUrl());
+            intent.putExtra("yoga_benefits",yoga.getyogaBenefits());
+            context.startActivity(intent);
         });
 
 

@@ -24,32 +24,24 @@ public class YogaListModalClass {
         return yogaName;
     }
 
-    public void setYogaName(String yogaName) {
-        this.yogaName = yogaName;
-    }
+
 
     public int getYogaImage() {
         return yogaImage;
     }
 
-    public void setYogaImage(int yogaImage) {
-        this.yogaImage = yogaImage;
-    }
+
 
     public String getYogaUrl() {
         return yogaUrl;
     }
 
-    public void setUrl(String url) {
-        this.yogaUrl = yogaUrl;
-    }
+
 
     public String getyogaBenefits() {
         return yogaBenefits;
     }
 
-    public void setyogaBenefits(String yogaBenefits) {
-        this.yogaBenefits = yogaBenefits;
-    }
+
 }
 

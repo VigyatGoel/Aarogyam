@@ -28,29 +28,26 @@ public class Meditation extends AppCompatActivity {
         btn = findViewById(R.id.btn);
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn.setOnClickListener(v -> {
 
-                        if (isTimerRunning) {
+                    if (isTimerRunning) {
 
-                            btn.setImageResource(R.drawable.ic_play);
-                            mediaPlayer.stop();
-                            mediaPlayer.release();
-                            mediaPlayer = null;
-                            // Pause the timer
-                            countDownTimer.cancel();
+                        btn.setImageResource(R.drawable.ic_play);
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = null;
+                        // Pause the timer
+                        countDownTimer.cancel();
 
-                        } else {
-                            btn.setImageResource(R.drawable.ic_pause);
+                    } else {
+                        btn.setImageResource(R.drawable.ic_pause);
 
-                            mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
-                            mediaPlayer.start();
+                        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.meditation_music);
+                        mediaPlayer.start();
 
-                            startTimer();
-                        }
-                        isTimerRunning = !isTimerRunning;
-            }
+                        startTimer();
+                    }
+                    isTimerRunning = !isTimerRunning;
         });
     }
 

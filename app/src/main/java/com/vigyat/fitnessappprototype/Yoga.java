@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,15 +41,12 @@ public class Yoga extends AppCompatActivity {
 
         yoga = new YogaListModalClass();
 
-        urlTextVIew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        urlTextVIew.setOnClickListener(view -> {
 
-                Uri webpage = Uri.parse(yogaUrl);
+            Uri webpage = Uri.parse(yogaUrl);
 
-                Intent intent = new Intent(Intent.ACTION_VIEW,webpage);
-                startActivity(intent);
-            }
+            Intent intent1 = new Intent(Intent.ACTION_VIEW,webpage);
+            startActivity(intent1);
         });
         TextView benefitsTextView = yogaBinding.benefits2;
 

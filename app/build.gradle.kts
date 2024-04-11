@@ -60,5 +60,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-location:21.2.0")
 
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.13")
+
 
 }

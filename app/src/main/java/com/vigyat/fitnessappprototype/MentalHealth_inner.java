@@ -1,16 +1,15 @@
 package com.vigyat.fitnessappprototype;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
-import com.airbnb.lottie.LottieAnimationView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MentalHealth_inner extends AppCompatActivity {
 
-    private LinearLayout meditation,helpline,yoga;
-    private LottieAnimationView meditationLAV, helplineLAV,yogaLAV;
+    private LinearLayout meditation, helpline, yoga;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,37 +18,26 @@ public class MentalHealth_inner extends AppCompatActivity {
 
         meditation = findViewById(R.id.idLLMeditation);
         helpline = findViewById(R.id.idLLGovtPortals);
-        meditationLAV = findViewById(R.id.LAVMeditation);
-        helplineLAV = findViewById(R.id.idLAVGovtPortal);
         yoga = findViewById(R.id.yogaLL);
-        yogaLAV = findViewById(R.id.yogaLAV);
 
-        meditation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent i = new Intent(getApplicationContext(), Meditation.class);
-                startActivity(i);
+        meditation.setOnClickListener(v -> {
 
-            }
+            Intent i = new Intent(getApplicationContext(), Meditation.class);
+            startActivity(i);
+
         });
 
-        helpline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), MentalHealth.class);
-                startActivity(i);
+        helpline.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), MentalHealth.class);
+            startActivity(i);
 
-            }
         });
 
-        yoga.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        yoga.setOnClickListener(view -> {
 
-                Intent intent = new Intent(getApplicationContext(), YogaList.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(getApplicationContext(), YogaList.class);
+            startActivity(intent);
         });
 
     }

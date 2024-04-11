@@ -3,16 +3,14 @@ package com.vigyat.fitnessappprototype;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -23,7 +21,6 @@ import androidx.work.Constraints;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,15 +34,13 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
 
-
-
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
     private static final int REQUEST_POST_NOTIFICATION_PERMISSION = 2;
 
 
     private LinearLayout exerciseLL, stepCounterLL;
 
-    private LottieAnimationView exerciseLAV, counterLAV;
+
     private ImageView profileImage;
     private TextView welcomeText;
 
@@ -57,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding mainBinding;
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         //Check if the permission is granted
@@ -90,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         exerciseLL = mainBinding.idLLExercise;
-        exerciseLAV = mainBinding.LAVExercise;
+
         stepCounterLL = mainBinding.idLLstepCounter;
         welcomeText = mainBinding.welcomeText;
         tipsRecyclerView = mainBinding.tipRecyclerView;
@@ -133,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -227,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void profileImageClick(){
+    private void profileImageClick() {
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(i);
     }

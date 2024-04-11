@@ -16,23 +16,15 @@ public class GovtHelpLineModal {
         return image;
     }
 
-    public void setImage(int image) {
-        this.image = image;
-    }
+
 
     public String getHelplineName() {
         return helplineName;
     }
 
-    public void setHelplineName(String helplineName) {
-        this.helplineName = helplineName;
-    }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }

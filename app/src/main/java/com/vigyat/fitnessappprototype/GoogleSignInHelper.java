@@ -52,8 +52,9 @@ public class GoogleSignInHelper {
                     GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
                     mAuth.signInWithCredential(authCredential).addOnCompleteListener(getAuthResultHandler());
-                } catch (ApiException e) {
+                } catch (ApiException e){
                     e.printStackTrace();
+
                 }
             }
         };
