@@ -3,7 +3,6 @@ package com.vigyat.fitnessappprototype;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,14 +10,11 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.os.IBinder;
 import android.hardware.SensorManager;
+import android.os.IBinder;
 import android.widget.Toast;
-import androidx.core.app.NotificationCompat;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
+import androidx.core.app.NotificationCompat;
 
 
 public class StepCounterService extends Service implements SensorEventListener {
@@ -27,8 +23,6 @@ public class StepCounterService extends Service implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor stepDetectorSensor;
     private int stepCount = 0;
-
-
 
 
     @Override
