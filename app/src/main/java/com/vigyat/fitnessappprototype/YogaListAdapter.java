@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +18,8 @@ import java.util.List;
 
 public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyViewHolder> {
 
-    private List<YogaListModalClass> yogaList;
-    private Context context;
+    private final List<YogaListModalClass> yogaList;
+    private final Context context;
 
     public YogaListAdapter(List<YogaListModalClass> yogaList, Context context) {
         this.yogaList = yogaList;
@@ -30,7 +30,7 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
     @Override
     public YogaListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_yoga,parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_yoga, parent, false);
         return new YogaListAdapter.MyViewHolder(itemView);
     }
 
@@ -52,8 +52,8 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
 
             intent.putExtra("yoga_name", yoga.getYogaName());
             intent.putExtra("yoga_image", yoga.getYogaImage());
-            intent.putExtra("yoga_url",yoga.getYogaUrl());
-            intent.putExtra("yoga_benefits",yoga.getyogaBenefits());
+            intent.putExtra("yoga_url", yoga.getYogaUrl());
+            intent.putExtra("yoga_benefits", yoga.getyogaBenefits());
             context.startActivity(intent);
         });
 
@@ -66,7 +66,7 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
         return yogaList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
         TextView textView;

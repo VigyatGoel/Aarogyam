@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TipsCardViewAdapter extends RecyclerView.Adapter<TipsCardViewAdapter.ViewHolder> {
 
-    private List<String> mData;
+    private final List<String> mData;
 
     public TipsCardViewAdapter(List<String> mData) {
         this.mData = mData;

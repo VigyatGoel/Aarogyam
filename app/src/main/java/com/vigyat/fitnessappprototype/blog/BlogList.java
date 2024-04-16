@@ -3,11 +3,8 @@ package com.vigyat.fitnessappprototype.blog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,17 +13,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.ktx.Firebase;
-import com.google.firebase.storage.StorageReference;
 import com.vigyat.fitnessappprototype.R;
 import com.vigyat.fitnessappprototype.databinding.ActivityBlogListBinding;
 
@@ -36,12 +28,10 @@ import java.util.List;
 public class BlogList extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-    FirebaseAuth.AuthStateListener authStateListener;
     FirebaseUser user;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference = db.collection("Blog");
-    private StorageReference storageReference;
+    private final CollectionReference collectionReference = db.collection("Blog");
     private List<Blog> blogList;
 
     BlogAdapter blogAdapter;
@@ -87,32 +77,26 @@ public class BlogList extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        collectionReference.get().addOnSuccessListener(queryDocumentSnapshots -> {
 
-                blogList.clear(); // Clear the blogList before adding blogs
+                    blogList.clear(); // Clear the blogList before adding blogs
 
-                for(QueryDocumentSnapshot blogs : queryDocumentSnapshots){
+                    for (QueryDocumentSnapshot blogs : queryDocumentSnapshots) {
 
-                    Blog blog = blogs.toObject(Blog.class);
-                    blogList.add(blog);
-                }
+                        Blog blog = blogs.toObject(Blog.class);
+                        blogList.add(blog);
+                    }
 
-                blogAdapter = new BlogAdapter(BlogList.this, blogList);
-                recyclerView.setAdapter(blogAdapter);
-                blogAdapter.notifyDataSetChanged();
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                    blogAdapter = new BlogAdapter(BlogList.this, blogList);
+                    recyclerView.setAdapter(blogAdapter);
+                    blogAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
 
-                Log.e("BlogList", "Error loading blogs", e);
+                    Log.e("BlogList", "Error loading blogs", e);
 
 
-                Toast.makeText(BlogList.this, "Something went wrong...", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    Toast.makeText(BlogList.this, "Something went wrong...", Toast.LENGTH_SHORT).show();
+                });
     }
 }

@@ -25,17 +25,14 @@ public class YogaListModalClass {
     }
 
 
-
     public int getYogaImage() {
         return yogaImage;
     }
 
 
-
     public String getYogaUrl() {
         return yogaUrl;
     }
-
 
 
     public String getyogaBenefits() {

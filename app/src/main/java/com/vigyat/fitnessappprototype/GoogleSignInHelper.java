@@ -2,12 +2,12 @@ package com.vigyat.fitnessappprototype;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -52,8 +52,8 @@ public class GoogleSignInHelper {
                     GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
                     AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
                     mAuth.signInWithCredential(authCredential).addOnCompleteListener(getAuthResultHandler());
-                } catch (ApiException e){
-                    e.printStackTrace();
+                } catch (ApiException e) {
+                    Log.e("GoogleSignInHelper", "Google sign in failed", e);
 
                 }
             }

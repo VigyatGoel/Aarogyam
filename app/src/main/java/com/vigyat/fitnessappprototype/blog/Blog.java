@@ -50,9 +50,6 @@ public class Blog {
     }
 
 
-
-
-
     public String getUserId() {
         return userId;
     }

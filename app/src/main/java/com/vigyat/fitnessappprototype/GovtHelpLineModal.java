@@ -17,7 +17,6 @@ public class GovtHelpLineModal {
     }
 
 
-
     public String getHelplineName() {
         return helplineName;
     }

@@ -1,8 +1,5 @@
 package com.vigyat.fitnessappprototype;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import com.vigyat.fitnessappprototype.databinding.ActivityStepCounterBinding;
 
-public class StepCounter extends AppCompatActivity{
+public class StepCounter extends AppCompatActivity {
 
     private TextView stepGoalTV;
     private int stepsGoal;
@@ -51,7 +51,6 @@ public class StepCounter extends AppCompatActivity{
         registerReceiver(stepCountUpdateReceiver, filter);
 
 
-
         Spinner spinnerStepGoal = findViewById(R.id.spinnerStepGoal);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.step_goal_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -63,7 +62,7 @@ public class StepCounter extends AppCompatActivity{
                 String selectedStepGoal = (String) parentView.getItemAtPosition(position);
                 // Convert the selectedStepGoal to an integer and set it as the stepsGoal
                 stepsGoal = Integer.parseInt(selectedStepGoal);
-                stepGoalTV.setText(""+stepsGoal);
+                stepGoalTV.setText("" + stepsGoal);
                 updateProgressBar(storedStepCount, stepsGoal, progressBar);
             }
 
@@ -79,11 +78,11 @@ public class StepCounter extends AppCompatActivity{
     }
 
     private void updateProgressBar(int currentStepCount, int goal, ProgressBar progressBar) {
-        int stepCounterProgress = (int)(((float) currentStepCount / goal) * 100);
+        int stepCounterProgress = (int) (((float) currentStepCount / goal) * 100);
         progressBar.setProgress(stepCounterProgress);
     }
 
-    private BroadcastReceiver stepCountUpdateReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver stepCountUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("step_count_updated")) {

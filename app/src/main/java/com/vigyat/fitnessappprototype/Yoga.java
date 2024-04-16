@@ -1,13 +1,13 @@
 package com.vigyat.fitnessappprototype;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.vigyat.fitnessappprototype.databinding.ActivityYogaBinding;
@@ -35,7 +35,7 @@ public class Yoga extends AppCompatActivity {
 
         // Find views in your layout
         ImageView imageView = yogaBinding.yogaImg;
-        TextView nameTextView =yogaBinding.textView6;
+        TextView nameTextView = yogaBinding.textView6;
 
         urlTextVIew = yogaBinding.textView7;
 
@@ -45,9 +45,19 @@ public class Yoga extends AppCompatActivity {
 
             Uri webpage = Uri.parse(yogaUrl);
 
-            Intent intent1 = new Intent(Intent.ACTION_VIEW,webpage);
+            Intent intent1 = new Intent(Intent.ACTION_VIEW, webpage);
             startActivity(intent1);
         });
+
+        imageView.setOnClickListener(view -> {
+
+            Uri webpage = Uri.parse(yogaUrl);
+
+            Intent intent1 = new Intent(Intent.ACTION_VIEW, webpage);
+            startActivity(intent1);
+        });
+
+
         TextView benefitsTextView = yogaBinding.benefits2;
 
 
@@ -58,7 +68,7 @@ public class Yoga extends AppCompatActivity {
                 .load(yogaImageResource)
                 .into(imageView);
 
-         // Load the image resource
+        // Load the image resource
         nameTextView.setText(yogaName);
 
         benefitsTextView.setText(yogaBenefits);

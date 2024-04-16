@@ -31,12 +31,12 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
     @Override
     public BlogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-         View view = LayoutInflater.from(context)
-                 .inflate(R.layout.blog_row,
-                         parent,
-                         false
-                 );
-         return new BlogViewHolder(view);
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.blog_row,
+                        parent,
+                        false
+                );
+        return new BlogViewHolder(view);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
 
             String imageUrl = currentBlog.getImageUrl();
 
-            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(currentBlog.getTimeAdded().getSeconds()*1000);
+            String timeAgo = (String) DateUtils.getRelativeTimeSpanString(currentBlog.getTimeAdded().getSeconds() * 1000);
 
             holder.dateAdded.setText(timeAgo);
             Glide.with(context).load(imageUrl).fitCenter().into(holder.image);
@@ -68,11 +68,11 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.BlogViewHolder
     }
 
 
-    class BlogViewHolder extends RecyclerView.ViewHolder{
+    static class BlogViewHolder extends RecyclerView.ViewHolder {
 
         public TextView title, thoughts, dateAdded, name;
         public ImageView image;
-        public String userId;
+
 
         public BlogViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -2,6 +2,7 @@ package com.vigyat.fitnessappprototype;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;

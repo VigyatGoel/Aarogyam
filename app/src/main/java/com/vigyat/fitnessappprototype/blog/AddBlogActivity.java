@@ -11,28 +11,22 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.vigyat.fitnessappprototype.R;
 import com.vigyat.fitnessappprototype.databinding.ActivityAddBlogBinding;
 
@@ -49,8 +43,8 @@ public class AddBlogActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageView imageView;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference = db.collection("Blog");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference collectionReference = db.collection("Blog");
 
     //Storage
     private StorageReference storageReference;
@@ -58,7 +52,6 @@ public class AddBlogActivity extends AppCompatActivity {
     private String currentUserId;
     private String currentUserName;
     private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseUser user;
 
     // Activity Result Launcher
@@ -67,12 +60,12 @@ public class AddBlogActivity extends AppCompatActivity {
     Uri imageUri;
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
         user = firebaseAuth.getCurrentUser();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,18 +91,15 @@ public class AddBlogActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if(user != null){
+        if (user != null) {
 
             currentUserId = user.getUid();
             currentUserName = user.getDisplayName();
         }
 
-        mTakePhoto = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
-            @Override
-            public void onActivityResult(Uri o) {
-                imageView.setImageURI(o);
-                imageUri = o;
-            }
+        mTakePhoto = registerForActivityResult(new ActivityResultContracts.GetContent(), o -> {
+            imageView.setImageURI(o);
+            imageUri = o;
         });
 
         addPhotoBtn.setOnClickListener(v -> mTakePhoto.launch("image/*"));
@@ -117,10 +107,9 @@ public class AddBlogActivity extends AppCompatActivity {
         shareBtn.setOnClickListener(v -> shareBlog());
 
 
-
     }
 
-    private void shareBlog(){
+    private void shareBlog() {
 
         String title, thoughts;
         title = String.valueOf(titleEt.getText());
@@ -128,59 +117,39 @@ public class AddBlogActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        if(!TextUtils.isEmpty(title) && !TextUtils.isEmpty(thoughts) && imageUri != null){
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(thoughts) && imageUri != null) {
 
             final StorageReference filePath = storageReference
                     .child("blog_images")
-                    .child("image_"+ Timestamp.now().getSeconds());
+                    .child("image_" + Timestamp.now().getSeconds());
 
             filePath.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
+                    .addOnSuccessListener(taskSnapshot -> filePath.getDownloadUrl().addOnSuccessListener(uri -> {
 
-                                    String imageUrl = uri.toString();
+                        String imageUrl = uri.toString();
 
-                                    Blog blog = new Blog();
-                                    blog.setTitle(title);
-                                    blog.setThoughts(thoughts);
-                                    blog.setImageUrl(imageUrl);
-                                    blog.setTimeAdded(new Timestamp(new Date()));
-                                    blog.setUserName(currentUserName);
-                                    blog.setUserId(currentUserId);
+                        Blog blog = new Blog();
+                        blog.setTitle(title);
+                        blog.setThoughts(thoughts);
+                        blog.setImageUrl(imageUrl);
+                        blog.setTimeAdded(new Timestamp(new Date()));
+                        blog.setUserName(currentUserName);
+                        blog.setUserId(currentUserId);
 
 
-                                    collectionReference.add(blog).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                        @Override
-                                        public void onSuccess(DocumentReference documentReference) {
+                        collectionReference.add(blog).addOnSuccessListener(documentReference -> {
 
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                             Intent i = new Intent(AddBlogActivity.this, BlogList.class);
-                                             startActivity(i);
-                                             finish();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(AddBlogActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(AddBlogActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Intent i = new Intent(AddBlogActivity.this, BlogList.class);
+                            startActivity(i);
+                            finish();
+                        }).addOnFailureListener(e -> Toast.makeText(AddBlogActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    }).addOnFailureListener(e -> {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(AddBlogActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                    }));
 
-        }
-        else{
+        } else {
 
             progressBar.setVisibility(View.INVISIBLE);
         }

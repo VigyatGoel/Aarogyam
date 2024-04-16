@@ -30,7 +30,6 @@ import java.util.Objects;
 public class Login extends AppCompatActivity {
 
 
-
     TextInputEditText editTextEmail, editTextPassword;
     AppCompatButton buttonLogin, googleSignInBtn;
     FirebaseAuth mAuth;
@@ -76,8 +75,6 @@ public class Login extends AppCompatActivity {
         googleSignInBtn = loginBinding.googleSignInBtn;
 
 
-
-
         googleSignIn();
 
         Intent i = new Intent(getApplicationContext(), StepCounterService.class);
@@ -116,7 +113,6 @@ public class Login extends AppCompatActivity {
     }
 
     public void login() {
-
 
 
         progressBar.setVisibility(View.VISIBLE);

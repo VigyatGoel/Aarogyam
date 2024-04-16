@@ -7,10 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,7 +26,6 @@ import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.vigyat.fitnessappprototype.blog.AddBlogActivity;
 import com.vigyat.fitnessappprototype.blog.BlogList;
 import com.vigyat.fitnessappprototype.databinding.ActivityMainBinding;
 
@@ -43,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ACTIVITY_RECOGNITION_PERMISSION = 1;
     private static final int REQUEST_POST_NOTIFICATION_PERMISSION = 2;
-
 
 
     private CardView mentalHealthCard, stepsCard, blogCard;
@@ -106,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         stepsTV.setText(String.valueOf(storedStepCount));
 
 
-
         updateUI();
 
 
@@ -139,12 +133,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i2);
         });
 
-        blogCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, BlogList.class);
-                startActivity(i);
-            }
+        blogCard.setOnClickListener(v -> {
+            Intent i12 = new Intent(MainActivity.this, BlogList.class);
+            startActivity(i12);
         });
 
         profileImage.setOnClickListener(v -> profileImageClick());

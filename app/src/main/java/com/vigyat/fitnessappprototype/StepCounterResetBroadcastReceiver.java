@@ -8,11 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 public class StepCounterResetBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.clear();
-            editor.apply();
-        }
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        SharedPreferences preferences = context.getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
     }
+}
