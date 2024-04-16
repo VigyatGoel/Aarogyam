@@ -40,7 +40,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.work:work-runtime:2.9.0")
     implementation("com.google.android.gms:play-services-fitness:21.1.0")
-    implementation("com.airbnb.android:lottie:6.4.0")
+
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.firebase:firebase-database:20.3.1")
@@ -60,7 +60,8 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-location:21.2.0")
 
-    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.13")
+
+    implementation("com.airbnb.android:lottie:6.4.0")
 
 
 }

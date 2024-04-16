@@ -8,6 +8,7 @@ public class Blog {
     private String thoughts;
     private String imageUrl;
 
+
     private String userId;
     private Timestamp timeAdded;
     private String userName;
@@ -47,6 +48,10 @@ public class Blog {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
+
+
 
     public String getUserId() {
         return userId;

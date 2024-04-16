@@ -1,10 +1,14 @@
 package com.vigyat.fitnessappprototype;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -24,6 +29,8 @@ import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.vigyat.fitnessappprototype.blog.AddBlogActivity;
+import com.vigyat.fitnessappprototype.blog.BlogList;
 import com.vigyat.fitnessappprototype.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -38,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_POST_NOTIFICATION_PERMISSION = 2;
 
 
-    private LinearLayout exerciseLL, stepCounterLL;
 
+    private CardView mentalHealthCard, stepsCard, blogCard;
 
     private ImageView profileImage;
-    private TextView welcomeText;
+    private TextView welcomeText, stepsTV;
 
     private RecyclerView tipsRecyclerView;
     private TipsCardViewAdapter tipsViewAdapter;
@@ -83,13 +90,21 @@ public class MainActivity extends AppCompatActivity {
         // If user is signed in, set the welcome message
 
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        blogCard = mainBinding.blogCard;
 
-        exerciseLL = mainBinding.idLLExercise;
 
-        stepCounterLL = mainBinding.idLLstepCounter;
+        stepsCard = mainBinding.stepsCard;
+        mentalHealthCard = mainBinding.mentalHealthCard;
         welcomeText = mainBinding.welcomeText;
         tipsRecyclerView = mainBinding.tipRecyclerView;
         profileImage = mainBinding.profileImage;
+        stepsTV = mainBinding.stepTV;
+        int storedStepCount = getStepCountFromSharedPreference();
+
+        //private FloatingActionButton fab;
+        // Initialize the step count to zero
+        stepsTV.setText(String.valueOf(storedStepCount));
+
 
 
         updateUI();
@@ -112,16 +127,24 @@ public class MainActivity extends AppCompatActivity {
         tipsRecyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
 
 
-        exerciseLL.setOnClickListener(v -> {
+        mentalHealthCard.setOnClickListener(v -> {
 
-            Intent i1 = new Intent(getApplicationContext(), MentalHealth_inner.class);
+            Intent i1 = new Intent(MainActivity.this, MentalHealth_inner.class);
             startActivity(i1);
         });
 
-        stepCounterLL.setOnClickListener(v -> {
+        stepsCard.setOnClickListener(v -> {
 
-            Intent i2 = new Intent(getApplicationContext(), StepCounter.class);
+            Intent i2 = new Intent(MainActivity.this, StepCounter.class);
             startActivity(i2);
+        });
+
+        blogCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, BlogList.class);
+                startActivity(i);
+            }
         });
 
         profileImage.setOnClickListener(v -> profileImageClick());
@@ -227,4 +250,10 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(i);
     }
+
+    private int getStepCountFromSharedPreference() {
+        SharedPreferences sharedPreferences = getSharedPreferences("StepCounterPrefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getInt("stepCount", 0);
+    }
+
 }
