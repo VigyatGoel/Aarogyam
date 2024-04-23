@@ -23,5 +23,5 @@ Aarogyam is a comprehensive fitness-based Android application designed to suppor
 1. Clone the repository:
 
 ```bash
-https://github.com/VigyatGoel/Aarogyam.git
+git clone https://github.com/VigyatGoel/Aarogyam.git
 ```
