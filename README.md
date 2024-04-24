@@ -15,7 +15,7 @@ Aarogyam is a comprehensive fitness-based Android application designed to suppor
 
 ## Requirements
 
-- jdk 17 or above
+- jdk 8 or above
 - Android Studio
 
 ## Installation
