@@ -10,10 +10,12 @@ Aarogyam is a comprehensive fitness-based Android application designed to suppor
 - Meditation
 - Yoga
 - See and edit user profile
+- Upload your Blogs related to health (will be uploaded to firebase-firestore database)
+- See blogs of other people just like posts on Instagram (will be retrieved from firestore database)
 
 ## Requirements
 
-- jdk 17 or above
+- jdk 8 or above
 - Android Studio
 
 ## Installation
@@ -21,5 +23,5 @@ Aarogyam is a comprehensive fitness-based Android application designed to suppor
 1. Clone the repository:
 
 ```bash
-https://github.com/VigyatGoel/Aarogyam.git
+git clone https://github.com/VigyatGoel/Aarogyam.git
 ```
