@@ -1,8 +1,10 @@
 package com.vigyat.fitnessappprototype;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -17,6 +19,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Constraints;
@@ -28,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.vigyat.fitnessappprototype.blog.BlogList;
 import com.vigyat.fitnessappprototype.databinding.ActivityMainBinding;
+import com.vigyat.fitnessappprototype.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding mainBinding;
 
+    private MainViewModel viewModel;
+
+    private BroadcastReceiver stepCountReceiver;
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_ACTIVITY_RECOGNITION_PERMISSION);
         }
 
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
 
         auth = FirebaseAuth.getInstance();
 
@@ -78,11 +89,12 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             finish();
+        } else {
+            viewModel.setUserData(user);
         }
 
         scheduleResetStepCounter();
 
-        // If user is signed in, set the welcome message
 
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         blogCard = mainBinding.blogCard;
@@ -94,17 +106,29 @@ public class MainActivity extends AppCompatActivity {
         tipsRecyclerView = mainBinding.tipRecyclerView;
         profileImage = mainBinding.profileImage;
         stepsTV = mainBinding.stepTV;
+
         int storedStepCount = getStepCountFromSharedPreference();
+        viewModel.setStepCount(storedStepCount);
 
-        //private FloatingActionButton fab;
-        // Initialize the step count to zero
-        stepsTV.setText(String.valueOf(storedStepCount));
+        stepCountReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int stepCount = intent.getIntExtra("stepCount", 0);
+                viewModel.setStepCount(stepCount);
 
+            }
+        };
+        registerReceiver(stepCountReceiver, new IntentFilter("com.vigyat.fitnessappprototype.STEP_COUNT_CHANGED"), Context.RECEIVER_NOT_EXPORTED);
+
+        viewModel.getStepCount().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer stepCount) {
+                stepsTV.setText(String.valueOf(stepCount));
+            }
+        });
 
         updateUI();
 
-
-        //resetStepCounter();
 
         Intent i = new Intent(getApplicationContext(), StepCounterService.class);
         startService(i);
@@ -217,25 +241,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        FirebaseUser currentUser = auth.getCurrentUser();
-        if (currentUser != null) {
-            // Update the user's name
-            String username = currentUser.getDisplayName();
-            if (username != null) {
-                welcomeText.setText(username);
-            } else {
-                welcomeText.setText("User");
-            }
+        viewModel.getUserData().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(FirebaseUser firebaseUser) {
 
-            // Update the user's profile image
-            if (currentUser.getPhotoUrl() != null) {
-                Glide.with(this)
-                        .load(currentUser.getPhotoUrl())
-                        .circleCrop()
-                        .into(profileImage);
+                FirebaseUser currentUser = auth.getCurrentUser();
+                if (firebaseUser != null) {
+                    // Update the user's name
+                    String username = firebaseUser.getDisplayName();
+                    if (username != null) {
+                        welcomeText.setText(username);
+                    } else {
+                        welcomeText.setText("User");
+                    }
+
+                    // Update the user's profile image
+                    if (firebaseUser.getPhotoUrl() != null) {
+                        Glide.with(MainActivity.this)
+                                .load(currentUser.getPhotoUrl())
+                                .circleCrop()
+                                .into(profileImage);
+                    }
+                }
             }
-        }
+        });
     }
+
 
     private void profileImageClick() {
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
@@ -247,4 +278,9 @@ public class MainActivity extends AppCompatActivity {
         return sharedPreferences.getInt("stepCount", 0);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(stepCountReceiver);
+    }
 }

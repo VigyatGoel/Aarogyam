@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.vigyat.fitnessappprototype.viewmodel.MainViewModel;
+
 
 public class StepCounterService extends Service implements SensorEventListener {
 
@@ -23,6 +25,8 @@ public class StepCounterService extends Service implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor stepDetectorSensor;
     private int stepCount = 0;
+
+    private MainViewModel viewModel;
 
 
     @Override
