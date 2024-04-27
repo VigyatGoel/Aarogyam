@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.vigyat.fitnessappprototype.blog.BlogList;
 import com.vigyat.fitnessappprototype.databinding.ActivityMainBinding;
+import com.vigyat.fitnessappprototype.decoration.SpacesItemDecorationTipsCard;
 import com.vigyat.fitnessappprototype.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         tipsRecyclerView.setAdapter(tipsViewAdapter);
 
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-        tipsRecyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        tipsRecyclerView.addItemDecoration(new SpacesItemDecorationTipsCard(spacingInPixels));
 
 
         mentalHealthCard.setOnClickListener(v -> {

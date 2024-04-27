@@ -2,6 +2,7 @@ package com.vigyat.fitnessappprototype;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -37,25 +38,29 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull YogaListAdapter.MyViewHolder holder, int position) {
 
-        YogaListModalClass yoga = yogaList.get(position);
-        holder.textView.setText(yoga.getYogaName());
-        //holder.imageView.setImageResource(yoga.getYogaImage());
+        try {
+            YogaListModalClass yoga = yogaList.get(position);
+            holder.textView.setText(yoga.getYogaName());
+            //holder.imageView.setImageResource(yoga.getYogaImage());
 
-        Glide.with(context)
-                .load(yoga.getYogaImage())
-                .into(holder.imageView);
+            Glide.with(context)
+                    .load(yoga.getYogaImage())
+                    .into(holder.imageView);
 
 
-        holder.yogaLayout.setOnClickListener(v -> {
+            holder.yogaLayout.setOnClickListener(v -> {
 
-            Intent intent = new Intent(context, Yoga.class);
+                Intent intent = new Intent(context, Yoga.class);
 
-            intent.putExtra("yoga_name", yoga.getYogaName());
-            intent.putExtra("yoga_image", yoga.getYogaImage());
-            intent.putExtra("yoga_url", yoga.getYogaUrl());
-            intent.putExtra("yoga_benefits", yoga.getyogaBenefits());
-            context.startActivity(intent);
-        });
+                intent.putExtra("yoga_name", yoga.getYogaName());
+                intent.putExtra("yoga_image", yoga.getYogaImage());
+                intent.putExtra("yoga_url", yoga.getYogaUrl());
+                intent.putExtra("yoga_benefits", yoga.getyogaBenefits());
+                context.startActivity(intent);
+            });
+        } catch (Exception e) {
+            Log.e("Yoga", "Adapter Error", e);
+        }
 
 
     }
@@ -71,7 +76,7 @@ public class YogaListAdapter extends RecyclerView.Adapter<YogaListAdapter.MyView
         ImageView imageView;
         TextView textView;
 
-        ConstraintLayout yogaLayout;
+        CardView yogaLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
