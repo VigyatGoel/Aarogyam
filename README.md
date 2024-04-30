@@ -25,3 +25,13 @@ Aarogyam is a comprehensive fitness-based Android application designed to suppor
 ```bash
 git clone https://github.com/VigyatGoel/Aarogyam.git
 ```
+
+## Contributing
+
+Contributions to Aarogyam are welcome!
+If you have any suggestions, bug reports, or feature requests, please open an issue on the GitHub repository or submit a pull request with your changes.
+
+## License
+
+Aarogyam is released under the MIT License.
+
